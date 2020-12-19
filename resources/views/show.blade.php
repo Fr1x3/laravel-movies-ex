@@ -39,14 +39,40 @@
                             @endif
                         @endforeach
                     </div>
-                    @if (count($movie['videos']['results']) > 0)
-                        <div class="mt-12">
-                            <a href="https://youtube.com/watch?v={{$movie['videos']['results'][0]['key']}}" target="_blank" class="flex items-center bg-red-500 text-gray-900 max-w-xs rounded font-semibold px-5 py-4 hover:bg-orange-600 transition ease-in-out duration-150">
-                                <span>play trailer</span>
-                            </a>
-                        </div>
+                    <div x-data="{isOpen: false}">
+                        @if (count($movie['videos']['results']) > 0)
+                            <div class="mt-12">
+                                <button
+                                @click="isOpen = true"
 
-                    @endif
+                                target="_blank" class="flex inline-flex items-center bg-red-500 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-600 transition ease-in-out duration-150">
+                                    <span>play trailer</span>
+                            </button>
+                            </div>
+
+                        @endif
+                        <div x-show="isOpen" style="background-color: rgba(0,0,0,0.5)" class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto">
+                            <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                                <div class="bg-gray-900 rounded">
+                                    <div class="flex justify-end pr-4 pt-2">
+                                        <button
+                                        @click="isOpen = false"
+                                         class="text-3xl leading-none hover:text-gray-300">&times;</button>
+                                    </div>
+                                    <div class="modal-body px-8 py-8">
+                                        <div style="padding-top: 56.25%" class="responsive-container overflow-hidden relative">
+                                            <iframe src="https://www.youtube.com/embed/{{$movie['videos']['results'][0]['key']}}"
+                                            width="560"
+                                            height="315"
+                                            allow="autoplay: encrypted-media"
+                                            allowfullscreen
+                                            frameborder="0" class="responsive-iframe absolute top-0 left-0 w-full h-full"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="movie-images border-b border-gray-800">
+    <div class="movie-images border-b border-gray-800" x-data="{isOpen: false, image:''}">
         <div class="container mx-auto px-4 py-16">
             <h2 class="text-4xl font-semibold">
 
@@ -84,7 +110,13 @@
                 @foreach ($movie['images']['backdrops'] as $img)
                     @if ($loop->index < 6)
                         <div class="mt-8">
-                            <a href="#">
+                            <a
+                            @click.prevent="
+                                isOpen=true
+                                image = '{{ 'https://image.tmdb.org/t/p/original/' .$img['file_path'] }}'
+                            "
+                            href="#"
+                            >
                                 <img src="{{ 'https://image.tmdb.org/t/p/w500' .$img['file_path'] }}" alt="profile" class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                         </div>
@@ -92,6 +124,23 @@
                 @endforeach
 
             </div>
+
+            <div x-show="isOpen" style="background-color: rgba(0,0,0,0.5)" class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto">
+                <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                    <div class="bg-gray-900 rounded">
+                        <div class="flex justify-end pr-4 pt-2">
+                            <button
+                            @click="isOpen = false"
+                             class="text-3xl leading-none hover:text-gray-300">&times;</button>
+                        </div>
+                        <div class="modal-body px-8 py-8">
+                            <img :src="image" alt="poster">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
 @endsection

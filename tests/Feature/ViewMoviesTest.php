@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
-use Facade\Ignition\Solutions\LivewireDiscoverSolution;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Tests\TestCase;
+use Livewire\Livewire;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facade\Ignition\Solutions\LivewireDiscoverSolution;
 
 class ViewMoviesTest extends TestCase
 {
